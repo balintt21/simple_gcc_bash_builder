@@ -10,7 +10,7 @@ if [ -z "$builder_AR" ]; then
     builder_AR=ar
 fi
 if [ -z "$builder_LD_FLAGS" ]; then
-    builder_LD_FLAGS=ld
+    builder_LD_FLAGS=""
 fi
 
 NAMESPACE="ivs_protocol"
@@ -128,7 +128,7 @@ elif [ "$1" == "dynamic" ]; then
 
 	    echo "Linking with $builder_CC."
         echo $object_files
-	    $builder_CC -shared -o "output/lib/lib$OUTPUT_NAME.so" $object_files
+	    $builder_CC -shared "$builder_LD_FLAGS" -o "output/lib/lib$OUTPUT_NAME.so" $object_files
 	    if [ $? -ne 0 ]; then
 	        echo "Build failed!"
 	        exit 1
