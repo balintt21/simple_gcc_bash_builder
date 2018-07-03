@@ -96,6 +96,10 @@ gather_object_files()
     object_files="$object_files$(find $(pwd)/src -type f,l -iregex '.*\.\(o\|a\)' -printf 'src/%P ')"
 }
 
+if [ ! -d "src" ]; then
+    mkdir src
+fi
+
 if [ -z $1 ] || [ "$1" == "help" ]; then
     echo "Usage: $0 (static|dynamic|exec|clean|help)"
     echo "Options"
