@@ -43,8 +43,8 @@ src     - Source files : <b>*.(c|i|ii|cc|cp|cxx|cpp|CPP|c++|C|s|S|sx)</b>
 </pre>
 
 ## Excluding source files
-To exclude source files a ./src/.exclude or ./src/.<build_type>.exclude file must exists.
-If ./src/.exclude exists then it overrides every build type specific exclude file.
+To exclude source files a ./src/.exclude or ./src/.<build_type>.exclude file must exists.<br/>
+If ./src/.exclude exists then it overrides every build type specific exclude file.<br/>
 An exclude file should contain lines of relative pathes of files to exclude from ./src directory.
 ### Example:
 <pre>
