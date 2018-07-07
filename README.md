@@ -1,8 +1,10 @@
 # simple_gcc_bash_builder
 ## Usage
 ```
-./builder.sh (static|dynamic|exec|clean|strip|help)
+./builder.sh (static|dynamic|exec|clean|strip|help) [OUTPUT_NAME] [NAMESPACE]
 ```
+_\(Everything between [] is optional.\)_
+
 ## Brief
 Compiles every source file from ./src directory recursively.
 Then makes an executable or library file from compiled and other object(*.o) or archive(*.a) files from ./src into ./output directory.
