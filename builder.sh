@@ -25,6 +25,8 @@ if [ ! -z "$3" ]; then
     builder_NAMESPACE="$3"
 fi
 
+exclude_file=""
+
 gather_includes()
 {
     if [ ! -d "include" ]; then
@@ -48,19 +50,39 @@ gather_includes()
     done
 }
 
+select_exclude_file()
+{
+    if [ -f "src/.exclude" ]; then
+        exclude_file="src/.exclude"
+    elif [ -f "src/.$1.exclude" ]; then
+        exclude_file="src/.$1.exclude"
+    fi
+}
+
+check_if_excluded()
+{
+    if [ ! -z "$exclude_file" ]; then
+        regex="^$1$";regex=${regex//"/"/"\/"}
+        excluded="$(grep -e $regex $exclude_file | wc -l)"
+        return $excluded
+    fi
+    return 0
+}
+
 build()
 {
     if [ ! -d "build" ]; then
       mkdir build
     fi
 
-    build_type="static"
+    select_exclude_file "$1"
+
+    build_type="$1"
     prev_build_type=""
     number_of_changes=0
     source_files="$(find $(pwd)/src -type f,l -iregex '.*\.\(c\|i\|ii\|cc\|cp\|cxx\|cpp\|CPP\|c++\|C\|s\|S\|sx\)' -printf 'src/%P ')"
 
     if [ "$1" == "dynamic" ]; then
-        build_type="$1"
         builder_FLAGS="$builder_FLAGS -fPIC"
     fi
 
@@ -75,6 +97,11 @@ build()
 
     for source_file in "${sources[@]}"
     do
+        check_if_excluded "$(echo $source_file | cut -d'/' -f2-)"
+        if [ "$?" == "1" ]; then
+            echo -e "\t$source_file -> EXCLUDED"
+            continue
+        fi
         source_file_name=$(echo "$source_file" | cut -d'.' -f1)
         source_file_name=${source_file##*/}
         source_file_checksum=$($builder_CC $builder_FLAGS  -E $source_file -o - | md5sum  | cut -d' ' -f1)
@@ -85,7 +112,7 @@ build()
         fi
 
         if [ "$source_file_checksum" != "$prev_checksum_of_source_file" ] || [ "$build_type" != "$prev_build_type" ]; then
-            echo "    $source_file -> $source_file_name.o"
+            echo -e "\t$source_file -> $source_file_name.o"
             $builder_CC $builder_FLAGS -c "$source_file" -o "build/$source_file_name.o"
 
             if [ $? -ne 0 ]; then
@@ -136,7 +163,11 @@ if [ -z $1 ] || [ "$1" == "help" ]; then
 "\tbuild\t\t\t- Object files and other artifacts\n"\
 "\tinclude\t\t\t- Exported includes from ./src : *.(h|hh|H|hp|hxx|hpp|HPP|h++|tcc|inl)\n"\
 "\toutput\t\t\t- Build results\n"\
-"\tsrc\t\t\t- Source files : *.(c|i|ii|cc|cp|cxx|cpp|CPP|c++|C|s|S|sx)"
+"\tsrc\t\t\t- Source files : *.(c|i|ii|cc|cp|cxx|cpp|CPP|c++|C|s|S|sx)\n"\
+"Excluding files\n"\
+"\tTo exclude source files a ./src/.exclude or ./src/.<build_type>.exclude file must exists.\n"\
+"\tIf ./src/.exclude exists then it overrides every build type specific exclude file.\n"\
+"\tAn exclude file should contain lines of relative pathes of files to exclude from ./src directory.\n"\
 
 elif [ "$1" == "dynamic" ]; then
     echo "Dynamic build."
