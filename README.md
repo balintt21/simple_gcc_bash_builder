@@ -41,3 +41,8 @@ include - Exported includes from ./src : <b>*.(h|hh|H|hp|hxx|hpp|HPP|h++|tcc|inl
 output  - Build results
 src     - Source files : <b>*.(c|i|ii|cc|cp|cxx|cpp|CPP|c++|C|s|S|sx)</b>
 </pre>
+
+## Excluding source files
+To exclude source files a ./src/.exclude or ./src/.<build_type>.exclude file must exists.\n"\
+If ./src/.exclude exists then it overrides every build type specific exclude file.\n"\
+An exclude file should contain lines of relative pathes of files to exclude from ./src directory.
