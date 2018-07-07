@@ -31,3 +31,11 @@ builder_NAMESPACE   - subdirectory name of exported include files
                       ./include/<builder_NAMESPACE>
                       (default: output)
 </pre>
+
+## Directory structure
+<pre>
+build   - Object files and other artifacts
+include - Exported includes from ./src : <b>*.(h|hh|H|hp|hxx|hpp|HPP|h++|tcc|inl)</b>
+output  - Build results
+src     - Source files : <b>*.(c|i|ii|cc|cp|cxx|cpp|CPP|c++|C|s|S|sx)</b>
+</pre>
