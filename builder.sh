@@ -15,8 +15,14 @@ fi
 if [ -z "$builder_OUTPUT_NAME" ]; then
     builder_OUTPUT_NAME="output"
 fi
+if [ ! -z "$2" ]; then
+    builder_OUTPUT_NAME="$2"
+fi
 if [ -z "$builder_NAMESPACE" ]; then
     builder_NAMESPACE="$builder_OUTPUT_NAME"
+fi
+if [ ! -z "$3" ]; then
+    builder_NAMESPACE="$3"
 fi
 
 gather_includes()
@@ -104,33 +110,33 @@ if [ ! -d "src" ]; then
 fi
 
 if [ -z $1 ] || [ "$1" == "help" ]; then
-    echo -e "Usage: $0 (static|dynamic|exec|clean|strip|help)\n\n"\
-    "Brief\n"\
-    "\tCompiles every source file from ./src directory then makes an executable or library file \n\tfrom compiled and other object(*.o) or archive(*.a) files from ./src into ./output.\n"\
-    "\tAlso exports every header file from ./src as soft link into ./include\n\n\t(recursive)\n"\
-    "Options\n"\
-    "\tstatic\t\t\t- Build static library\n"\
-    "\tdynamic\t\t\t- Build dynamic library\n"\
-    "\texec\t\t\t- Build executable\n"\
-    "\tclean\t\t\t- Clean build results\n"\
-    "\tstrip\t\t\t- Strips any executable or dynamic library from ./output\n"\
-    "\thelp\t\t\t- Show this help\n"\
-    "Environment variables\n"\
-    "\tbuilder_FLAGS\t\t- compiler flags (default: -O3 -Wall)\n"\
-    "\tbuilder_LD_FLAGS\t- linker flags   (default: )\n"\
-    "\tbuilder_CC\t\t- compiler       (default: g++)\n"\
-    "\tbuilder_AR\t\t- archiver       (default: ar)\n"\
-    "\tbuilder_OUTPUT_NAME\t- the name of build result which can be an executable or library\n"\
-    "\t\t\t\t  ./output/<builder_OUTPUT_NAME> OR ./output/lib/lib<builder_OUTPUT_NAME>(.a|.so|.dll)\n"\
-    "\t\t\t\t  (default: output)\n"\
-    "\tbuilder_NAMESPACE\t- subdirectory name of exported include files\n"\
-    "\t\t\t\t  ./include/<builder_NAMESPACE>\n"\
-    "\t\t\t\t  (default: output)\n"\
-    "Directory structure\n"\
-    "\tbuild\t\t\t- Object files and other artifacts\n"\
-    "\tinclude\t\t\t- Exported includes from ./src : *.(h|hh|H|hp|hxx|hpp|HPP|h++|tcc|inl)\n"\
-    "\toutput\t\t\t- Build results\n"\
-    "\tsrc\t\t\t- Source files : *.(c|i|ii|cc|cp|cxx|cpp|CPP|c++|C|s|S|sx)"
+    echo -e "Usage: $0 (static|dynamic|exec|clean|strip|help) [output_name] [namespace]\n\t(Everything between [] is optional.)\n"\
+"Brief\n"\
+"\tCompiles every source file from ./src directory then makes an executable or library file \n\tfrom compiled and other object(*.o) or archive(*.a) files from ./src into ./output.\n"\
+"\tAlso exports every header file from ./src as soft link into ./include\n\n\t(recursive)\n"\
+"Options\n"\
+"\tstatic\t\t\t- Build static library\n"\
+"\tdynamic\t\t\t- Build dynamic library\n"\
+"\texec\t\t\t- Build executable\n"\
+"\tclean\t\t\t- Clean build results\n"\
+"\tstrip\t\t\t- Strips any executable or dynamic library from ./output\n"\
+"\thelp\t\t\t- Show this help\n"\
+"Environment variables\n"\
+"\tbuilder_FLAGS\t\t- compiler flags (default: -O3 -Wall)\n"\
+"\tbuilder_LD_FLAGS\t- linker flags   (default: )\n"\
+"\tbuilder_CC\t\t- compiler       (default: g++)\n"\
+"\tbuilder_AR\t\t- archiver       (default: ar)\n"\
+"\tbuilder_OUTPUT_NAME\t- the name of build result which can be an executable or library\n"\
+"\t\t\t\t  ./output/<builder_OUTPUT_NAME> OR ./output/lib/lib<builder_OUTPUT_NAME>(.a|.so|.dll)\n"\
+"\t\t\t\t  (default: output)\n"\
+"\tbuilder_NAMESPACE\t- subdirectory name of exported include files\n"\
+"\t\t\t\t  ./include/<builder_NAMESPACE>\n"\
+"\t\t\t\t  (default: output)\n"\
+"Directory structure\n"\
+"\tbuild\t\t\t- Object files and other artifacts\n"\
+"\tinclude\t\t\t- Exported includes from ./src : *.(h|hh|H|hp|hxx|hpp|HPP|h++|tcc|inl)\n"\
+"\toutput\t\t\t- Build results\n"\
+"\tsrc\t\t\t- Source files : *.(c|i|ii|cc|cp|cxx|cpp|CPP|c++|C|s|S|sx)"
 
 elif [ "$1" == "dynamic" ]; then
     echo "Dynamic build."
@@ -236,6 +242,8 @@ elif [ "$1" == "strip" ]; then
         echo "strip --strip-unneeded $to_strip"
         strip --strip-unneeded "$to_strip"
     fi
+else
+    echo "Unrecognized parameter: \"$1\"!"
 fi
 
 exit 0
