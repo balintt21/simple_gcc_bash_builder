@@ -22,14 +22,15 @@ help        - Show help
 
 ## Environment variables
 <pre>
-builder_LD_FLAGS    - linker flags       (default: )
-builder_CC          - C compiler         (default: gcc)
-builder_CXX         - C++ compiler       (default: g++)
-builder_AS          - Assembler          (default: as)
-builder_AR          - archiver           (default: ar)
-builder_CC_FLAGS    - C compiler flags   (default: -O3 -Wall)
-builder_CXX_FLAGS   - C++ compiler flags (default: -O3 -Wall)
-builder_AS_FLAGS    - Assembler flags
+builder_CROSS_COMPILE - cross compiler path/prefix
+builder_CC            - C compiler         (default: gcc)
+builder_CXX           - C++ compiler       (default: g++)
+builder_AS            - Assembler          (default: as)
+builder_AR            - archiver           (default: ar)
+builder_CC_FLAGS      - C compiler flags   (default: -O3 -Wall)
+builder_CXX_FLAGS     - C++ compiler flags (default: -O3 -Wall)
+builder_AS_FLAGS      - Assembler flags
+builder_LD_FLAGS      - linker flags       (default: )
 builder_OUTPUT_NAME - the name of build result which can be an executable or library
                       ./output/<builder_OUTPUT_NAME> OR ./output/lib/lib<builder_OUTPUT_NAME>(.a|.so|.dll)
                       (default: output)
