@@ -124,7 +124,13 @@ linking()
     else
         echo "Linking with $linker $2 $builder_LD_FLAGS"
         echo "$1"
-        $linker $2 $builder_LD_FLAGS -o "output/lib/lib$builder_OUTPUT_NAME.so" $1
+        dl_name="output/lib/lib$builder_OUTPUT_NAME"
+        if [[ $build_type == *win* ]]; then
+            dl_name="${dl_name}.dll"
+        else
+            dl_name="${dl_name}.so"
+        fi
+        $linker $2 $builder_LD_FLAGS -o "$dl_name" $1
     fi
 }
 
@@ -209,13 +215,14 @@ if [ ! -d "src" ]; then
 fi
 
 if [ -z $1 ] || [ "$1" == "help" ]; then
-    echo -e "Usage: $0 (static|dynamic|exec|clean|strip|help) [output_name] [namespace]\n\t(Everything between [] is optional.)\n"\
+    echo -e "Usage: $0 (static|dynamic|dynamic_win|exec|clean|strip|help) [output_name] [namespace]\n\t(Everything between [] is optional.)\n"\
 "Brief\n"\
 "\tCompiles every source file from ./src directory then makes an executable or library file \n\tfrom compiled and other object(*.o) or archive(*.a) files from ./src into ./output.\n"\
 "\tAlso exports every header file from ./src as soft link into ./include\n\n\t(recursive)\n"\
 "Options\n"\
 "\tstatic\t\t\t- Build static library\n"\
-"\tdynamic\t\t\t- Build dynamic library\n"\
+"\tdynamic\t\t\t- Build dynamic library \n"\
+"\tdynamic_win\t\t- Build dynamic library but name it as <output_name>.dll\n"\
 "\texec\t\t\t- Build executable\n"\
 "\tclean\t\t\t- Clean build results\n"\
 "\tstrip\t\t\t- Strips any executable or dynamic library from ./output (see strip --help)\n"\
@@ -245,7 +252,7 @@ if [ -z $1 ] || [ "$1" == "help" ]; then
 "\tIf ./src/.exclude exists then it overrides every build type specific exclude file.\n"\
 "\tAn exclude file should contain lines of relative pathes of files to exclude from ./src directory.\n"\
 
-elif [ "$1" == "dynamic" ]; then
+elif [ "$1" == "dynamic" ] || [ "$1" == "dynamic_win" ]; then
     echo "Dynamic build."
 
     gather_includes
