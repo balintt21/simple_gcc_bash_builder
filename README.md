@@ -14,6 +14,7 @@ Also exports every header file from ./src as soft link into ./include
 <pre>
 static      - Build static library
 dynamic     - Build dynamic library
+dynamic_win - Build dynamic library but name it as <output_name>.dll
 exec        - Build executable
 clean       - Clean build results
 strip       - Strip any executable or dynamic library from ./output (see strip --help)
