@@ -16,7 +16,7 @@ static      - Build static library
 dynamic     - Build dynamic library
 exec        - Build executable
 clean       - Clean build results
-strip       - Strip any executable or dynamic library from ./output
+strip       - Strip any executable or dynamic library from ./output (see strip --help)
 help        - Show help
 </pre>
 
