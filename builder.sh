@@ -221,10 +221,14 @@ if [ -z $1 ] || [ "$1" == "help" ]; then
 "\tstrip\t\t\t- Strips any executable or dynamic library from ./output (see strip --help)\n"\
 "\thelp\t\t\t- Show this help\n"\
 "Environment variables\n"\
-"\tbuilder_FLAGS\t\t- compiler flags (default: -O3 -Wall)\n"\
-"\tbuilder_LD_FLAGS\t- linker flags   (default: )\n"\
-"\tbuilder_CC\t\t- compiler       (default: g++)\n"\
-"\tbuilder_AR\t\t- archiver       (default: ar)\n"\
+"\tbuilder_CC\t\t - C compiler\t\t (default: gcc)\n"\
+"\tbuilder_CXX\t\t - C++ compiler\t\t (default: g++)\n"\
+"\tbuilder_AS\t\t - Assembler\t\t (default: as)\n"\
+"\tbuilder_AR\t\t - archiver\t\t (default: ar)\n"\
+"\tbuilder_CC_FLAGS\t - C compiler flags\t (default: -O3 -Wall)\n"\
+"\tbuilder_CXX_FLAGS\t - C++ compiler flags\t (default: -O3 -Wall)\n"\
+"\tbuilder_AS_FLAGS\t - Assembler flags\t (default: )\n"\
+"\tbuilder_LD_FLAGS\t - linker flags\t\t (default: )\n"\
 "\tbuilder_OUTPUT_NAME\t- the name of build result which can be an executable or library\n"\
 "\t\t\t\t  ./output/<builder_OUTPUT_NAME> OR ./output/lib/lib<builder_OUTPUT_NAME>(.a|.so|.dll)\n"\
 "\t\t\t\t  (default: output)\n"\
