@@ -131,8 +131,10 @@ linking()
 {
     if [ $there_are_cpp_files ]; then
         linker="$builder_CXX"
+        flags="$builder_CXX_FLAGS"
     else
         linker="$builder_CC"
+        flags="$builder_CC_FLAGS"
     fi
     
     if [ -z "$2" ]; then
@@ -148,7 +150,7 @@ linking()
         else
             dl_name="${dl_name}.so"
         fi
-        $linker $2 $builder_LD_FLAGS -o "$dl_name" $1
+        $linker $flags $2 $builder_LD_FLAGS -o "$dl_name" $1
     fi
 }
 
