@@ -42,9 +42,27 @@ fi
 
 build_type=""
 exclude_file=""
+include_flags=""
 has_cc="$(type "$builder_CC" &> /dev/null)"
 has_as="$(type "$builder_AS" &> /dev/null)"
 there_are_cpp_files=""
+
+fetch_includes_from_flags()
+{
+    if [[ $builder_CC_FLAGS == *I* ]]; then
+        res=$(echo "$builder_CC_FLAGS" | grep -oP '(?<=-I).*?(?=\s|$)' | tr '\n' ' ')
+        res=${res%?}
+        res="-I""${res// / -I}"
+        include_flags="$res"
+    fi
+
+    if [[ $builder_CXX_FLAGS == *I* ]]; then
+        res=$(echo "$builder_CXX_FLAGS" | grep -oP '(?<=I).*?(?=\s|$)' | tr '\n' ' ')
+        res=${res%?}
+        res="-I""${res// / -I}"
+        include_flags="$include_flags $res"
+    fi
+}
 
 gather_includes()
 {
@@ -141,6 +159,7 @@ build()
     fi
 
     select_exclude_file "$1"
+    fetch_includes_from_flags
 
     build_type="$1"
     build_dsc="$build_type:$builder_CC_FLAGS:$builder_CXX_FLAGS:$builder_AS_FLAGS:$builder_LD_FLAGS"
@@ -176,7 +195,8 @@ build()
         file_has_changed=""
 
         if [ -f "$object_file_path" ]; then
-            make_rule_of_dependencies=$($builder_CC $builder_FLAGS  -MM "$source_file" | cut -d':' -f2- )
+            make_rule_of_dependencies=$($builder_CC $include_flags -MM "$source_file" | cut -d':' -f2- | tr '\n' ' ' )
+            make_rule_of_dependencies="${make_rule_of_dependencies//'\'}"
             IFS=' ' read -r -a files_to_check <<< "$make_rule_of_dependencies"
             for file_to_check in "${files_to_check[@]}"
             do
