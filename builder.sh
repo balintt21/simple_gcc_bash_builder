@@ -277,7 +277,6 @@ if [ -z $1 ] || [ "$1" == "help" ]; then
 elif [ "$1" == "dynamic" ] || [ "$1" == "dynamic_win" ]; then
     echo "Dynamic build."
 
-    gather_includes
     build "$1"
 
     if [ $compiled_at_leat_one_file -ne 0 ]; then
@@ -293,14 +292,15 @@ elif [ "$1" == "dynamic" ] || [ "$1" == "dynamic_win" ]; then
 	        echo "Build failed!"
 	        exit 1
 	    fi
-	    echo "Done."
+        echo "Done."
+
+        gather_includes
 	else
 		echo "Nothing has changed since the last build."
 	fi
 elif [ "$1" == "static" ]; then
     echo "Static build."
     
-    gather_includes
     build "$1"
 
     if [ $compiled_at_leat_one_file -ne 0 ]; then
@@ -314,13 +314,14 @@ elif [ "$1" == "static" ]; then
         $builder_AR rvs "output/lib/lib$builder_OUTPUT_NAME.a" $object_files
         echo "Output: output/lib/lib$builder_OUTPUT_NAME.a"
         echo "Done."
+        
+        gather_includes
     else
         echo "Nothing has changed since the last build."
     fi
 elif [ "$1" == "exec" ]; then
     echo "Building executable."
 
-    gather_includes
     build "$1"
 
     if [ $compiled_at_leat_one_file -ne 0 ]; then
