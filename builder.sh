@@ -378,7 +378,6 @@ elif [ "$1" == "strip" ]; then
             if [ -n "$regex" ]; then
                 regex=${regex%?}
                 regex=".*\.\($regex)"
-                echo $regex
                 all_files_to_strip="$(find $(pwd)/output/lib -type f -iregex $regex -printf 'lib/%P ')"
             fi
             
