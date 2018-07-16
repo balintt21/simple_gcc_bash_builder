@@ -138,11 +138,11 @@ linking()
     fi
     
     if [ -z "$2" ]; then
-        echo "Linking with $linker $builder_LD_FLAGS"
+        echo "Linking with $linker $flags $builder_LD_FLAGS"
         echo "$1"
-        $linker $builder_LD_FLAGS -o "output/$builder_OUTPUT_NAME" $1
+        $linker $flags -o "output/$builder_OUTPUT_NAME" $1 $builder_LD_FLAGS
     else
-        echo "Linking with $linker $2 $builder_LD_FLAGS"
+        echo "Linking with $linker $flags $2 $builder_LD_FLAGS"
         echo "$1"
         dl_name="output/lib/lib$builder_OUTPUT_NAME"
         if [[ $build_type == *win* ]]; then
@@ -150,7 +150,7 @@ linking()
         else
             dl_name="${dl_name}.so"
         fi
-        $linker $flags $2 $builder_LD_FLAGS -o "$dl_name" $1
+        $linker $flags $2 -o "$dl_name" $1 $builder_LD_FLAGS
     fi
 }
 
